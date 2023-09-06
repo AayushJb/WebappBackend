@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+        <style>
+.black-band {
+  background-color: black;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.image {
+  margin-left: auto;
+  max-height: 100%;
+}
+
+.text {
+  margin-right: auto;
+  color: white;
+}
+.text p {
+  margin: 0;
+}
+
+
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #000000;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+        </style>
+  </head>
+  <body>
+  <p>Dear Sir,</p>
+  <p>Greetings for the day!!</p>
+  
+  
+   <h3>Waltz Monthly Summary - {{Associate}}</h3> 
+ 
+
+  <div class="black-band">
+    <div class="text">
+       <p>Waltz Monthly Summary</p>
+       <p>WA {{Associate}}</p>
+       <p>As on {{Yesterday}} </p>
+
+    </div>
+ 
+  <img src="https://i.imgur.com/7A5QggX.jpg" alt="Image" class="image">
+  </div>
+				
+					
+
+  <table class="table table-striped" style="margin-top: 40px;">
+                  <thead style="color:#fff; background: #000000; ">
+
+                   
+                    <tr >
+                      <th style="text-align: center;">Particulars</th>
+                      <th style="text-align: center;">Yesterday</th>
+                      <th style="text-align: center;">This Month</th>
+                     
+                    </tr>
+
+                  
+                  </thead>
+                  <tbody>
+            
+              
+                    
+                    <tr  style=" border: 1px ">
+                      <td>Commercial Win Count</td>
+                      <td>{{WinCountDay}}</td>
+                      <td>{{WinCountMonth}}</td>
+                    </tr>
+
+                     <tr  style=" border: 1px ">
+                      <td>Commercial Win Final Value</td>
+                      <td>{{WinFinalAmountDay}}</td>
+                      <td>{{WinFinalAmountMonth}}</td>
+                    </tr>
+
+                     <tr  style=" border: 1px ">
+                      <td>Sales</td>
+                      <td>{{SalesDay}}</td>
+                      <td>{{SalesMonth}}</td>
+                    </tr>
+
+                    
+                     <tr  style=" border: 1px ">
+                      <td>Receipt</td>
+                      <td>{{ReceiptDay}}</td>
+                      <td>{{ReceiptMonth}}</td>
+                    </tr>
+
+                     <tr  style=" border: 1px ">
+                      <td>Pipeline Count</td>
+                      <td>{{PipelineCountDay}}</td>
+                      <td>{{PipelineCountMonth}}</td>
+                    </tr>
+
+                     <tr  style=" border: 1px ">
+                      <td>Pipeline Final Amount</td>
+                      <td>{{PipelineFinalAmountDay}}</td>
+                      <td>{{PipelineFinalAmountMonth}}</td>
+                    </tr>
+
+                     <tr  style=" border: 1px ">
+                      <td>O/s Receivable WEBAPP</td>
+                      <td>-</td>
+                      <td>{{Outstanding}}</td>
+                    </tr>
+
+
+                    
+
+                  </tbody>
+                </table>
+
+
+
+
+
+
+
+
+  
+
+
+
+
+   
+  
+    
+    <p>Have a good day!!</p>
+     <p>Thanks & Regards,</p>
+     <p>JB GLASS</p>
+  </body>
+</html>

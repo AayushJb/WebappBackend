@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+  </head>
+  <body>
+  <p>Dear Team,</p>
+  <p>This email is in reference to project {{OrderNo}}_{{ProjectName}}. The Webapp has been updated today and there is 
+    a commercial impact of Rs.{{CommercialDiff}} in the current version which is {{OrderNo}}.
+   The changes in the current version are mentioned below is for your ready reference.</p>
+  
+
+
+{{#if TableConstruct}}
+
+<table>
+ 
+
+   {{#if NewSolutionslength}}   
+  <tr style="background-color: #D6EEEE;">
+    <th>New Locations</th>
+    <th>Floor/Space</th>
+    <th>Old Amount</th>
+    <th>New Amount</th>
+  </tr>
+
+   {{#each  NewSolutions}}
+      <tr>
+      <td>{{SolutionNumber}}</td>  
+      <td>{{Floor}}/{{Space}}</td>
+      <td>{{OldAmount}}</td>
+      <td>{{NewAmount}}</td>
+      </tr>
+      {{/each}} 
+  {{/if}}
+
+
+
+
+ <tr>
+      <th colspan="2" style="border: none;"></th>
+      <th style="background-color: #D6EEEE;">{{OldOrderNumber}}</th>  
+      <th style="background-color: #D6EEEE;">{{OldAmount}}</th>
+ </tr>
+ <tr>
+      <th colspan="2" style="border: none;"></th>
+      <th style="background-color: #D6EEEE;">{{NewOrderNumber}}</th>  
+      <th style="background-color: #D6EEEE;">{{NewAmount}}</th>
+ </tr>
+ <tr >
+      <th colspan="2" style="border: none;"></th>
+      <th style="background-color: #D6EEEE;">Commercial Impact</th>  
+      <th style="background-color: #D6EEEE;">{{CommercialDiff}}</th>
+ </tr>
+
+
+
+</table> 
+ 
+  
+
+
+{{/if}}
+
+
+
+
+
+
+
+
+  <p>Grand Total : Rs{{GrandTotal}}</p>
+  <p>Discount :  {{Discount}}%</p>
+  <p>Final Amount = Rs{{FinalAmount}}</p>
+  <p>Total Squarefeet : {{TotalSquareFeet}} sqft</p>
+  <p>The order was edited by {{User}}.</p>
+
+      
+  
+  
+     <p>Thanks & Regards,</p>
+     <p>JB GLASS</p>
+  </body>
+</html>

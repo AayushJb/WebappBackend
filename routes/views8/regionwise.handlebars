@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+        <style>
+
+          .black-band {
+  background-color: black;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.image {
+  margin-left: auto;
+  max-height: 100%;
+}
+
+.text {
+  margin-right: auto;
+  color: white;
+}
+.text p {
+  margin: 0;
+}
+
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+     </style>
+  </head>
+  <body>
+  <p>Dear {{Associate}},</p>
+  <p>Greetings for the day!!</p>
+  
+  
+   <h3>Daily Associate Analysis Report</h3> 
+
+
+   <div class="black-band">
+    <div class="text">
+       <p>Daily Associate Analysis Report - {{Associate}}</p>
+       <p>Period from {{StartDate}} to {{EndDate}} 8 a.m.</p>
+
+    </div>
+ 
+  <img src="https://i.imgur.com/7A5QggX.jpg" alt="Image" class="image">
+  </div>
+    
+
+
+				
+
+  <table class="table table-striped" style="margin-top: 40px;">
+                  <thead style="color:#fff; background: #000000; ">
+
+                    <tr>
+                        <th style="text-align: center;" >Particulars</th> 
+                        <th style="text-align: center;" colspan="2">PipelineCount </th> 
+                        <th style="text-align: center;" colspan="2">PipelineAmount</th> 
+                        <th style="text-align: center;" colspan="2">PipelineAmountCS</th>  
+                        <th style="text-align: center;" colspan="2">WinCount </th> 
+                        <th style="text-align: center;" colspan="2">WinAmount</th> 
+                        <th style="text-align: center;" colspan="2">WinAmountCS</th>  
+                        <th style="text-align: center;" colspan="2">Billing</th>  
+                        <th style="text-align: center;" colspan="2">Receipt</th>  
+                         
+
+                    </tr>
+
+                   
+                    <tr >
+                     
+                      <th style="text-align: center;">Region</th>
+                       <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+                        <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+                        <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+                        <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+                        <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+                        <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+                        <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+                        <th style="text-align: center;">Yesterday </th>  
+                       <th style="text-align: center;">ThisMonth </th>
+
+
+                    
+                    </tr>
+
+  
+                     
+   
+ 
+ 
+  
+  
+  
+  
+ 
+                   
+                  </thead>
+                  <tbody>
+
+
+
+
+                     {{#each  RegionwiseData}}
+                     <tr>
+                     <td>{{Region}}</td>  
+
+                     <td>{{YesterdayPipelineCount}}</td>
+                     <td>{{MonthPipelineCount}}</td>
+
+                     <td>{{YesterdayPipelineAmount}}</td>
+                     <td>{{MonthPipelineAmount}}</td>
+
+                     <td>{{YesterdayPipelineAmountCS}}</td>
+                     <td>{{MonthPipelineAmountCS}}</td>
+
+                     <td>{{YesterdayWinCount}}</td>
+                     <td>{{MonthWinCount}}</td>
+
+                     <td>{{YesterdayWinAmount}}</td>
+                     <td>{{MonthWinAmount}}</td>
+
+                     <td>{{YesterdayWinAmountCS}}</td>
+                     <td>{{MonthWinAmountCS}}</td>
+
+                     <td>{{YesterdayBilling }}</td>
+                     <td>{{MonthBilling}}</td>
+
+                     <td>{{YesterdayReceipt}}</td>
+                     <td>{{MonthReceipt}}</td>
+
+
+                
+                   </tr>
+                   {{/each}}  
+    
+            
+        <!--
+                   <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b>Pipeline Count</b></td>
+                     <td style="text-align: center;">{{ YesterdayPipelineCount }}</td>
+                     <td style="text-align: center;">{{  MonthPipelineCount }}</td>
+                    </tr>
+                    
+                    <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b>Total Pipeline Final Amount</b></td>
+                     <td style="text-align: center;">{{ YesterdayPipelineAmount}}</td>
+                     <td style="text-align: center;">{{ MonthPipelineAmount }}</td>
+                    </tr>
+
+                    <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b>Total Pipeline CS Amount</b></td>
+                     <td style="text-align: center;">{{ YesterdayPipelineAmountCS}}</td>
+                      <td style="text-align: center;">{{ MonthPipelineAmountCS }}</td>
+                    </tr>
+
+                     <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b>Win Count</b></td>
+                     <td style="text-align: center;">{{ YesterdayWinCount}}</td>
+                     <td style="text-align: center;">{{ MonthWinCount}}</td>
+                    </tr>
+                    
+                    <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b>Total Win Final Amount</b></td>
+                     <td style="text-align: center;">{{  YesterdayWinAmount }}</td>
+                     <td style="text-align: center;">{{  MonthWinAmount }}</td>
+                    </tr>
+
+                    <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b> Total Win CS Amount</b></td>
+                     <td style="text-align: center;">{{ YesterdayWinAmountCS }}</td>
+                     <td style="text-align: center;">{{ MonthWinAmountCS }}</td>
+                    </tr>
+
+                    <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b> Total Billing</b></td>
+                     <td style="text-align: center;">{{ YesterdayBilling }}</td>
+                     <td style="text-align: center;">{{ MonthBilling }}</td>
+                    </tr>
+
+                    <tr  style=" border: 1px ">
+                     <td style="text-align: center;"><b> Total Receipt</b></td>
+                     <td style="text-align: center;">{{ YesterdayReceipt }}</td>
+                     <td style="text-align: center;">{{ MonthReceipt }}</td>
+                    </tr>
+
+
+                 
+
+                    
+               --> 
+                  
+                   
+                 
+            
+                  </tbody>
+                </table>
+
+
+
+
+
+
+
+
+  
+
+
+
+
+   
+  
+    
+    <p>Have a good day!!</p>
+     <p>Thanks & Regards,</p>
+     <p>JB GLASS</p>
+  </body>
+</html>

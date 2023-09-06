@@ -1,0 +1,160 @@
+[
+  {
+      "_id": "625002a6321e67795f0a615c",
+      "GlassSubCategory": "WIREMESH",
+      "GlassFinish": [
+          "WM 206 Mosch",
+          "WM 209 Regen",
+          "WM 211 Luce",
+          "WM 212 Paxe Copper",
+          "WM 213 Paxe Silver",
+          "WM 214 Ritz",
+          "WM 215 Vivid",
+          "WM 207",
+          "WM 208"
+      ],
+      "DateCreated": "11/7/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "2000"
+  },
+  {
+      "_id": "62500381321e67795f0a6165",
+      "GlassSubCategory": "DECORATIVE",
+      "GlassFinish": [
+          "OM- 204",
+          "OM- 103",
+          "OM- 104",
+          "OM- 111",
+          "OM- 115",
+          "OM- 122",
+          "OM- 123",
+          "OM-R310",
+          "OM-R311 Luna",
+          "OM-R312 Greta",
+          "OM 124",
+          "OM 125",
+          "OM 126",
+          "OM 127",
+          "OM 128",
+          "OM 129",
+          "OM 130",
+          "OM 131",
+          "OM 132",
+          "OM 133",
+          "OM 134",
+          "OM 135",
+          "OM 136",
+          "OM 137",
+          "OM 138",
+          "OM 139",
+          "OM 140",
+          "OM 141"
+      ],
+      "DateCreated": "13/7/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "900"
+  },
+  {
+      "_id": "62500465321e67795f0a6169",
+      "GlassSubCategory": "FIGURED",
+      "GlassFinish": [
+          "Dazzel",
+          "Masterline",
+          "Reeded",
+          "Wide Flute",
+          "Benz",
+          "Diagonal Reeded",
+          "Diagonal Masterline"
+      ],
+      "DateCreated": "13/7/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "300"
+  },
+  {
+      "_id": "6250053f321e67795f0a6171",
+      "GlassSubCategory": "MARBLE",
+      "GlassFinish": [
+          "M 001 Blanco",
+          "M 002 Grano Gold",
+          "M 003 Verde",
+          "M004 Agate White",
+          "M 005 Notch",
+          "006 Spanish Gray",
+          "7 Spanish Gray",
+          "8 Spanish Gray",
+          "M 007 Golden Portoro",
+          "M 008 Alpine",
+          "M 009 Rosa",
+          "M012 White Pearl",
+          "M 013 Concrete",
+          "M014",
+          "M015",
+          "M016",
+          "M017",
+          "M018",
+          "M019",
+          "M021",
+          "M022",
+          "M023",
+          "118 Black Portoro",
+          "119 Black Portoro",
+          "120 Black Portoro"
+      ],
+      "DateCreated": "8/4/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "1200"
+  },
+  {
+      "_id": "6250056d321e67795f0a6175",
+      "GlassSubCategory": "MARMO",
+      "GlassFinish": [
+          "Marmo Gold"
+      ],
+      "DateCreated": "8/4/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "1200"
+  },
+  {
+      "_id": "6250060c321e67795f0a6179",
+      "GlassSubCategory": "MENDIX",
+      "GlassFinish": [
+          "OMP 106  Mark Gold",
+          "OMP 107 Mendix 37",
+          "OMP 108 Mendix 28",
+          "OMP 109 Furlong",
+          "OMP 111",
+          "OMP 112",
+          "OMP 119 Vark",
+          "OMP120 Luna",
+          "OMP124",
+          "OMP125",
+          "OMP126",
+          "OMP 119",
+          "OMP123 Greta"
+      ],
+      "DateCreated": "8/4/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "1200"
+  },
+  {
+      "_id": "6250065d321e67795f0a617d",
+      "GlassSubCategory": "NONE",
+      "GlassFinish": [
+          "Low Iron",
+          "Bronzo",
+          "Ombra",
+          "Rete"
+      ],
+      "DateCreated": "8/4/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "1200"
+  },
+  {
+      "_id": "62500707321e67795f0a6181",
+      "GlassSubCategory": "MIRROR",
+      "GlassFinish": [],
+      "DateCreated": "8/4/2022",
+      "__v": 0,
+      "GlassSubCategoryCost": "1200"
+  }
+]

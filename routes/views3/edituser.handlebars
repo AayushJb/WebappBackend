@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+  </head>
+  <body>
+  <p>Dear Team,</p>
+  <p> With reference to the above subject, the webapphas been updated todayand there is a commerial impact of
+     Rs.{{CommercialDiff}} in the current version {{NewVersion}}.The changes in the current version are mentioned below is 
+    for your reference. 
+  </p>
+  
+
+
+{{#if TableConstruct}}
+
+<table>
+  {{#if UpdatedSolutionslength}}   
+
+  <tr style="background-color: #D6EEEE;">
+
+    <th>Edited Locations</th>
+    <th>New Specs</th>
+    <th>Old Amount</th>
+    <th>New Amount</th>
+  </tr>
+     {{#each  Solutions}}
+      <tr>
+      <td>{{SolutionNumber}}</td>  
+      <td>{{EditedFields}}</td>
+      <td>{{OldAmount}}</td>
+      <td>{{NewAmount}}</td>
+      </tr>
+      {{/each}}  
+    {{/if}}
+
+   {{#if NewSolutionslength}}   
+  <tr style="background-color: #D6EEEE;">
+    <th>New Locations</th>
+    <th>Floor/Space</th>
+    <th>Old Amount</th>
+    <th>New Amount</th>
+  </tr>
+
+   {{#each  NewSolutions}}
+      <tr>
+      <td>{{SolutionNumber}}</td>  
+      <td>{{Floor}}/{{Space}}</td>
+      <td>{{OldAmount}}</td>
+      <td>{{NewAmount}}</td>
+      </tr>
+      {{/each}} 
+  {{/if}}
+
+{{#if DeletedSolutionslength}}
+
+  <tr style="background-color: #D6EEEE;">
+    <th>Deleted Locations</th>
+    <th>Floor/Space</th>
+    <th>Old Amount</th>
+    <th>New Amount</th>
+  </tr>
+
+   {{#each  DeletedSolutions}}
+      <tr>
+      <td>{{SolutionNumber}}</td>  
+      <td>{{Floor}}/{{Space}}</td>
+      <td>{{OldAmount}}</td>
+      <td>{{NewAmount}}</td>
+      </tr>
+      {{/each}} 
+ 
+
+ {{/if}}
+
+</table> 
+
+
+<p></p>
+ 
+
+ <table style="width:40%">
+
+  <tr>
+     
+      <th style="background-color: #D6EEEE;">{{OldOrderNumber}}</th>  
+      <th style="background-color: #D6EEEE;">{{OldAmount}}</th>
+ </tr>
+ <tr>
+     
+      <th style="background-color: #D6EEEE;">{{NewOrderNumber}}</th>  
+      <th style="background-color: #D6EEEE;">{{NewAmount}}</th>
+ </tr>
+ <tr>    
+      <th style="background-color: #D6EEEE;">Commercial Impact</th>  
+      <th style="background-color: #D6EEEE;">{{CommercialDiff}}</th>
+ </tr>
+
+ </table>
+  
+
+
+{{/if}}
+
+     <p>Thanks & Regards,</p>
+     <p>JB GLASS</p>
+  </body>
+</html>

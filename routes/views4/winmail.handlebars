@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+        <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+        </style>
+  </head>
+  <body>
+  <p>Dear Sir,</p>
+  <p>Greetings for the day!!</p>
+  
+  
+    
+    <p>Following table represents order created today orders which were created today.</p>
+   
+
+
+    
+ {{#if Pipelinelength}}   
+<h3>Pipeline Orders</h3>
+
+<table>
+ 
+  <tr style="background-color: #D6EEEE;">
+
+    
+						
+
+    <th>ORDER NO.</th>
+    <th>PROJECT NAME</th>
+    <th>CLIENT NAME</th>
+    <th>PROJECT LOCATION</th>
+    <th>ARCHITECT NAME</th>
+    <th>VALUE</th>
+    <th>ASSOCIATE</th>
+    <th>LEAD SOURCE</th>
+    <th>SOL COUNT</th>
+    <th>COMPLETED</th>
+  </tr>
+     {{#each  PipelineOrders}}
+      <tr>
+      <td>{{OrderNo}}</td>  
+      <td>{{ProjectName}}</td>
+      <td>{{ClientName}}</td>
+      <td>{{Location}}</td>
+      <td>{{Architect}}</td>
+      <td>{{FinalValue}}</td>
+      <td>{{Associate}}</td>
+      <td>{{Source}}</td>
+      <td>{{SolutionCount}}</td>
+      <td>{{Completed}}</td>
+      </tr>
+      {{/each}}  
+    
+
+</table> 
+
+{{/if}}
+
+
+  {{#if Winlength}}   
+<h3>Commercial Win Orders</h3>
+
+<table>
+ 
+  <tr style="background-color: #D6EEEE;">
+
+    
+						
+
+    <th>ORDER NO.</th>
+    <th>PROJECT NAME</th>
+    <th>CLIENT NAME</th>
+    <th>PROJECT LOCATION</th>
+    <th>ARCHITECT NAME</th>
+    <th>VALUE</th>
+    <th>ASSOCIATE</th>
+    <th>LEAD SOURCE</th>
+  </tr>
+     {{#each  WinOrders}}
+      <tr>
+      <td>{{OrderNo}}</td>  
+      <td>{{ProjectName}}</td>
+      <td>{{ClientName}}</td>
+      <td>{{Location}}</td>
+      <td>{{Architect}}</td>
+      <td>{{FinalValue}}</td>
+      <td>{{Associate}}</td>
+      <td>{{Source}}</td>
+      </tr>
+      {{/each}}  
+    
+
+</table> 
+
+{{/if}}
+
+
+  {{#if CommercialLength}}   
+<h3>Commercial Hold Orders</h3>
+
+<table>
+ 
+  <tr style="background-color: #D6EEEE;">
+
+    
+						
+
+    <th>ORDER NO.</th>
+    <th>PROJECT NAME</th>
+    <th>CLIENT NAME</th>
+    <th>PROJECT LOCATION</th>
+    <th>ARCHITECT NAME</th>
+    <th>VALUE</th>
+    <th>ASSOCIATE</th>
+    <th>LEAD SOURCE</th>
+  </tr>
+     {{#each  CommercialHoldOrders}}
+      <tr>
+      <td>{{OrderNo}}</td>  
+      <td>{{ProjectName}}</td>
+      <td>{{ClientName}}</td>
+      <td>{{Location}}</td>
+      <td>{{Architect}}</td>
+      <td>{{FinalValue}}</td>
+      <td>{{Associate}}</td>
+      <td>{{Source}}</td>
+      </tr>
+      {{/each}}  
+    
+
+</table> 
+
+{{/if}}
+
+
+
+  {{#if HandOverslength}}   
+<h3>HandOver Orders</h3>
+
+<table>
+ 
+  <tr style="background-color: #D6EEEE;">
+
+    
+						
+
+    <th>ORDER NO.</th>
+    <th>PROJECT NAME</th>
+    <th>CLIENT NAME</th>
+    <th>PROJECT LOCATION</th>
+    <th>ARCHITECT NAME</th>
+    <th>VALUE</th>
+    <th>ASSOCIATE</th>
+    <th>LEAD SOURCE</th>
+  </tr>
+     {{#each  HandOvers}}
+      <tr>
+      <td>{{OrderNo}}</td>  
+      <td>{{ProjectName}}</td>
+      <td>{{ClientName}}</td>
+      <td>{{Location}}</td>
+      <td>{{Architect}}</td>
+      <td>{{FinalValue}}</td>
+      <td>{{Associate}}</td>
+      <td>{{Source}}</td>
+      </tr>
+      {{/each}}  
+    
+
+</table> 
+
+{{/if}}
+
+  
+
+
+
+
+   
+  
+    
+    <p>Have a good day!!</p>
+     <p>Thanks & Regards,</p>
+     <p>JB GLASS</p>
+  </body>
+</html>
