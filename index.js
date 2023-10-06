@@ -20,6 +20,8 @@ var CustomerFeedBack= require('./models/customerfeedback');
 
 var Order = require('./models/order.js');
 
+var User = require('./models/user');
+
 
 const { mongoose } = require('./db.js');
 
@@ -158,12 +160,175 @@ app.use("/api/punchitems",punchitemsRoutes);
 
 
 const client_id = "5c8f5ac731b4bc9285588af2969768a738e4a75312249959b368081322069da8"
-const client_secret = "851537eb57502d1820aa8a0f141d75728594cc163e896c10eb0e68503988fe2e"
+const client_secret = "58cac5aee05f25af3ee9c58bcdb7e70995ea2aab52290727b18182052d98da71"
 var access_key;
 
 console.log({ client_id, client_secret })
 
 //app.use("/api/mailingreports",mailingReports);
+
+
+
+app.post('/api/whatsapp', (req, res) => {
+
+var Order = req.body.NewOrder;
+
+
+
+User.find()
+.then((response)=>{
+
+  let PhoneNumber = ""
+
+
+  console.log(response)
+
+ 
+  response.map(item=>{
+
+   if(item.UserFullName==Order.Associate)
+   {
+    PhoneNumber = item.PhoneNo
+   }
+
+   
+   
+  })
+
+
+
+
+  let OrderNo = Order.OrderNo;
+  let Associate = Order.Associate;
+  let Amount = Order.FinalAmount;
+  let EditDate = Order.EditDate;
+  let ProjectManager = "Sanjay Aggarwal"
+  let ProjectPhonenumber = "8800994446"
+
+  if(Order.Associate=="GAURAV SINGHAL")
+  {
+    WhatsApp(PhoneNumber,OrderNo,Associate,Amount,EditDate,ProjectManager,ProjectPhonenumber)
+  }
+ 
+
+
+  
+})
+
+
+
+
+
+  /*
+
+  NewAndOldOrder = {
+    NewOrder : orderPrev,
+    OldOrder : "",
+    User : "",
+    UserID : "",
+    Profile :"" 
+   }
+*/
+
+
+
+ // WhatsApp()
+});
+
+
+
+async function WhatsApp(PhoneNumber,OrderNo,Associate,Amount,EditDate,ProjectManager,ProjectPhonenumber)
+{
+ 
+  const res = await fetch(`http://waba.notbot.in/cloud/v1/messages`, {
+  method: 'POST',
+  qs: {run_configurable_validations: 'false'},
+  headers: {
+    'API-KEY': '64e9baf07257825730aa6043',
+    'content-type': 'application/json',
+ 
+   },
+  body: JSON.stringify(
+    {
+      "to": PhoneNumber,
+      "recipient_type": "individual",
+      "type": "template",
+      "template": {
+          "language": {
+              "policy": "deterministic",
+              "code": "en"
+          },
+          "name": "new_message",
+          "components": [
+              {
+                  "type": "body",
+                  "parameters": [
+                      {
+                          "type": "text",
+                          "text": Associate
+                      },
+                      {
+                          "type": "text",
+                          "text": OrderNo
+                      },
+                      {
+                          "type": "text",
+                          "text": Amount
+                      },
+                      {
+                          "type": "text",
+                          "text": EditDate
+                      },
+                      {
+                          "type": "text",
+                          "text": ProjectManager
+                      },
+                      {
+                          "type": "text",
+                          "text": ProjectPhonenumber
+                      }
+                  ]
+              },
+              {
+                  "type": "button",
+                  "sub_type": "url",
+                  "index": 1,
+                  "parameters": [
+                      {
+                          "type": "text",
+                          "text": "www.jbglass.in"
+                      }
+                  ]
+              }
+          ]
+      }
+  }
+  )
+ 
+})
+
+const data = await res.json();
+
+console.log(data)
+
+ 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //===================WEBHOOK OF PROCORE TO RECORD DATA OF CHANGE IN PUNCH LIST=======================================
@@ -355,7 +520,90 @@ app.post('/api/procoreprojectDetails', (req, res) => {
    })
    .then((response)=>{
 
-    return GetProcorePunchID(response, ProjectID)
+     return ListProcoreProjectsforP(response)
+   })
+   .catch((error)=>{
+    if(error)
+    {
+      let status = "Error Occured"
+      res.json(status)
+    }
+  })
+  .then((response)=>{
+    
+
+   // { ProcoreProjects : data, AccessToken : access_token}
+
+    let ProcoreOrders = response.ProcoreProjects
+    let AccessToken = response.AccessToken
+    let FoundProcoreOrderID = "";
+
+
+    
+        
+    let ProjectRefNo = ''
+    let version = ''
+
+
+
+    if(OrderNumber.includes("/V-"))
+    {
+     let hyphen = OrderNumber.lastIndexOf("/V-");
+     version = OrderNumber.substring(hyphen + 1,OrderNumber.length);
+     let tempproref = OrderNumber.substring(0, hyphen);
+     let slash = tempproref.lastIndexOf("/");
+     let proref = tempproref.substring(slash + 1, hyphen); 
+     ProjectRefNo = proref
+     
+    }
+ 
+    if(!OrderNumber.includes("/V-"))
+    {
+     
+     let slash = OrderNumber.lastIndexOf("/");
+     let proref = OrderNumber.substring(slash+ 1, OrderNumber.length);
+     ProjectRefNo = proref
+    }  
+
+
+    
+ 
+
+    
+
+    for(var i =0; i<ProcoreOrders.length; i++)
+    {
+       let ProcoreProNum
+
+       let ProSlash = ProcoreOrders[i].project_number.lastIndexOf("/")
+       ProcoreProNum = ProcoreOrders[i].project_number.substring(0,ProSlash);
+
+
+
+
+      if(ProcoreProNum==ProjectRefNo)
+      {
+        FoundProcoreOrderID = ProcoreOrders[i].id
+      }
+    }
+
+
+    let NewRes = {ProjectID : FoundProcoreOrderID, AccessToken : AccessToken}
+
+    return NewRes
+
+
+
+
+
+  })
+
+   .then((response)=>{
+
+    let AccessToken = response.AccessToken
+    let ProjectID = response.ProjectID
+
+    return GetProcorePunchID(AccessToken, ProjectID)
 
    }).then((response)=>{
 
@@ -480,6 +728,30 @@ return details
 }
 
 
+async function ListProcoreProjectsforP(access_token)
+{
+
+ 
+  const res = await fetch(`https://api.procore.com/rest/v1.0/projects?company_id=562949953442334`, {
+    method: 'GET',
+    headers: {
+    Authorization: `Bearer ${access_token}`,
+    'content-type': 'application/json',
+    'Procore-Company-Id': 562949953442334
+     }
+   
+  })
+
+const data = await res.json();
+
+let Details = { ProcoreProjects : data, AccessToken : access_token}
+
+return Details;
+
+
+}
+
+
 
 
 
@@ -557,8 +829,7 @@ async function TestCreateProjectCS()
           projtype :  "Win",
           buildtype : "SOCIAL",
           buildperf : "SHASHANK SINGH",
-          facadele : "JB GLASS",
-        
+          facadele : "JB GLASS"
 
 
           }
@@ -1121,77 +1392,7 @@ app.post('/api/makeglassproject', async(req, res) => {
   var Order = req.body.Order;
   var Users = req.body.Users;
  
-  // CreateProjectCS(Order,LedgerDetail,Users)
-    
-   /*
-
-  CreateProjectCS(Order,LedgerDetail,Users)
-  .catch((error)=>{
-   if(error)
-   {
-     let status = "Error Occured"
-     res.json(status)
-   }
-   })
-   //start procore 
-  .then((response)=>{
-     return getAccessToken()
-   })
-  .catch((error)=>{
-   if(error)
-   {
-     let status = "Error Occured"
-     res.json(status)
-   }
-   })
-  .then((response)=>{ 
- 
-   var userData = req.body.Users
-   var Order = req.body.Order
- 
- 
-
- 
- 
- 
-   let DealerDiscount =""
-   let CSValue = ""
- 
-   for(var i = 0 ; i < userData.length ; i++)
-   {
-    if(userData[i].UserFullName == Order.Associate)
-    {
-     Order.OfficeID = userData[i].ProcoreOfficeID;
-     DealerDiscount = userData[i].DealerDiscount; 
-    }
-   }
- 
-    if(DealerDiscount=="0")
-    {
-     CSValue = Order.FinalAmount.toString()
-    }
- 
-    if(DealerDiscount!=="0")
-    {
-     CSValue = (Number(Order.GrandTotal) - Number(Order.GrandTotal)*Number(DealerDiscount)*0.01).toFixed(2).toString()
-    }
- 
- 
-    Order.CSValue = CSValue;
- 
- 
-    return ListProcoreProjects(response,req.body.Order,req.body.LedgerDetail)
-   })
-  .catch((error)=>{
-     if(error)
-     {
-       let status = "Error Occured"
-       res.json(status)
-     }
-   })
-
-*/
-
+  
 
    
   CreateProjectCS(Order,LedgerDetail,Users)
@@ -1864,10 +2065,6 @@ app.post('/api/makeglassproject', async(req, res) => {
    }
 
 
-   console.log(SystemPunchtype)
-   console.log(ProjectPunctype)
-   console.log(SubtrackPunchtype)
-   console.log(SubframePunchtype)
 
    
 
@@ -3601,7 +3798,7 @@ app.post('/api/makeglassproject', async(req, res) => {
     .then((response)=>{
     
      
- 
+  
      var promises= [];
  
      for(var i = 0 ; i < response.length; i++)
@@ -3621,7 +3818,8 @@ app.post('/api/makeglassproject', async(req, res) => {
      }
     })
     .then((response)=>{
- 
+   
+      
       
      let status = ''
    //=======================Checking of error===============================================
@@ -3637,7 +3835,12 @@ app.post('/api/makeglassproject', async(req, res) => {
        let ProjectID = response[0].ProjectID
        let LedgerDetail = response[0].LedgerDetail
  
-      
+       if(response[0].Order.Associate=="GAURAV SINGHAL")
+       {
+         UserID = 7934350
+       }
+
+
        if(response[0].Order.Associate=="SHASHANK SINGH")
        {
          UserID = 7934350
@@ -3746,7 +3949,8 @@ app.post('/api/makeglassproject', async(req, res) => {
     .then((response)=>{
 
      // { AccessToken : access_token, ProjectID : ProjectID, ReqResposne : response}
-
+  
+   
      var AccessToken = response.AccessToken;
      var ProjectID = response.ProjectID;
      var ReqResposne = response.ReqResposne;
@@ -3782,6 +3986,7 @@ app.post('/api/makeglassproject', async(req, res) => {
       }
      })
      .then((response)=>{
+      
       res.json(response.ReqResposne)
       })
 
@@ -4266,229 +4471,7 @@ async function UpdateProcoreSource(access_token,ProjectID,source)
 
 
 
-async function CreateGlassProjectCS(Order,LedgerDetail,Users)
-{
 
-
-
-  let WinRefNo = ""
-  let Version= ""
-
-  if(Order.OrderNo.includes("/V-"))
-  {
-   let hyphen = Order.OrderNo.lastIndexOf("/V-");
-   let tempproref = Order.OrderNo.substring(0, hyphen);
-   Version =  Order.OrderNo.substring( hyphen,Order.OrderNo.length);
-   let slash = tempproref.lastIndexOf("/");
-   let proref = tempproref.substring(slash + 1, hyphen); 
-   WinRefNo = proref
-  }
-
-  if(!Order.OrderNo.includes("/V-"))
-  {
-   let slash = Order.OrderNo.lastIndexOf("/");
-   let proref = Order.OrderNo.substring(slash+ 1, Order.OrderNo.length);
-   Version = "V-0"
-   WinRefNo = proref
-  }
-
-
-
-
-  var ClientDiscount = Order.Discount
-  var BeforeDiscount = Order.GrandTotal;
- 
-  var TotalLocations = Order.Solutions.length;
-  var TotalSquareFeet = Order.TotalSquareFeet;
-  var LastEditDate = Order.EditDate;
-  var Discount = Order.Discount
-  var Location = Order.Location
-  var WinDate = Order.WinDate
-  var EditDate = Order.EditDate
-  var SolutionNumber = Order.Solutions.length.toString()
-  var Source = Order.Source.toUpperCase();
-  var HandoverDate = Order.HandOverDate;
-  var CommercialWinDate = Order.CommercialWinDate;
-  var Associate = Order.Associate.toUpperCase();
-  var Status = Order.Status.toUpperCase();
-  var CreationDate = Order.CreationDate
-  var Architect = Order.Architect;
-  var DealerDiscount = 0
-  var Pro
-  
-  var Office =""
-
-  if(Order.Associate=="AAYUSH PANDEY")
-  {
-    Order.Associate == "SHASHANK SINGH"
-  }
- 
-   
-  if(Order.Associate=="SHASHANK SINGH")
-  {
-    Office = "JB GLASS"
-  }
-  if(Order.Associate=="AMIT PANDEY")
-  {
-    Office = "JB GLASS"
-  }
-
-  if(Order.Associate=="AAYUSH PANDEY")
-  {
-    Office = "JB GLASS"
-  }
-  if(Order.Associate=="VIKAS SINGHAL")
-  {
-    Office = "JB GLASS"
-  }
-  if(Order.Associate=="ANKIT AGGARWAL")
-  {
-    Office = "JB GLASS"
-  }
-  if(Order.Associate=="RIYAZ SAYYED")
-  {
-    Office = "OM INTERIORS"
-  }
-
-
-  if(Order.Associate=="SAKINA BATISH")
-  {
-    Office = "OM INTERIORS"
-  }
-
-  if(Order.Associate=="NAYAN PATIL"||Order.Associate=="UTKALIKA")
-  {
-    Office = "AAREN INTPRO"
-  }
-
-  if(Order.Associate=="VIPIN KUMAR")
-  {
-    Office = "JB GLASS"
-  }
-
-  if(Order.Associate=="VISHAL PARIKH")
-  {
-    Office = "SURFACES PLUS"
-  }
-
-  if(Order.Associate=="RAJENDRA BADAYA")
-  {
-    Office = "BADAYA KITCHENS"
-  }
-  
-
-  if(Order.Associate=="RAHUL JAISWAL")
-  {
-    Office = "PRABHUSURAT"
-  }
-
-  
-  if(Order.Associate=="AAYUSH PANDEY")
-  {
-    Office = "JB GLASS"
-  }
-
-  if(Order.Associate=="ANUJ JAIN")
-  {
-    Office = "JB GLASS"
-  }
-
-  if(Order.Associate=="RUCHIR")
-  {
-    Office = "WALTZ HYDERABAD"
-  }
-
-  if(Order.Associate=="PRAVEEN KANODIA")
-  {
-    Office = "SPACIO"
-  }
-  if(Order.Associate=="JB ACCOUNTS")
-  {
-    Office = "JB ACCOUNTS"
-  }
-
-  
- 
- 
-
-
-
- 
-  
- 
-  var ProjectName = WinRefNo+"/"+Order.ProjectName;
-
-
-  
-
-  const res = await fetch(`http://103.203.224.171/Project/api/Rec/SaveProjectData`, {
-    method: 'POST',
-    headers: {
-    'content-type': 'application/json',
-     },
-    body: JSON.stringify(
-      
-        {
-          projId: "", 
-          refno : WinRefNo, 
-          projval :BeforeDiscount,
-          projname : ProjectName, 
-          windate : CommercialWinDate, 
-          totsys : DealerDiscount,
-          totsqm :ClientDiscount, 
-          lasteditdt :LastEditDate, 
-          remark :"", 
-          Enq_Thr :"ONLINE", 
-          Proj_Dt : WinDate, 
-          Category :"A", 
-          Proj_Importance :"YES",
-          job_type :"EOU", 
-          Est_SDate :CreationDate, 
-          Est_EDate : HandoverDate, 
-          Clad_Area :Order.ProValue,  
-          Client_Req :"", 
-          Site_Add : "", 
-          Landmark :"", 
-          Tel1 :TotalSquareFeet, 
-          FaxNo :"", 
-          Tel2 :TotalLocations,
-          Email  :"TEST@GMAIL.COM",
-          No_Layer :"2",
-          Description :"LAMINATION WITH IGU",
-          Qtuantity :"10",
-          Aprx_Prdct_Val :"980000",
-          Sell_Rate :"2000",
-          city : "XXXXX",
-          projtype :  Status,
-          buildtype : Source,
-          buildperf : Associate,
-          facadele : Office,
-        
-
-
-          }
-      
-    )
-   
-  })
- 
-const data = await res.json();
-
-
-console.log(data)
-
-var ProjectsDetails = {
-  data : data,
-  Order : Order
-}
-
-
-
-return ProjectsDetails
-
-
- 
-}
 
 async function UpdateGlassProjectCS(Order)
 {
@@ -4716,7 +4699,7 @@ return ProjectsDetails
 
 
 
-
+/*
 async function CreateProjectCS(Order,LedgerDetail,Users)
 {
 
@@ -4951,6 +4934,451 @@ return data
 
 
   
+
+ 
+}
+*/
+
+async function CreateProjectCS(Order,LedgerDetail,Users)
+{
+
+
+
+  let WinRefNo = ""
+  let Version= ""
+
+  if(Order.OrderNo.includes("/V-"))
+  {
+   let hyphen = Order.OrderNo.lastIndexOf("/V-");
+   let tempproref = Order.OrderNo.substring(0, hyphen);
+   Version =  Order.OrderNo.substring( hyphen,Order.OrderNo.length);
+   let slash = tempproref.lastIndexOf("/");
+   let proref = tempproref.substring(slash + 1, hyphen); 
+   WinRefNo = proref
+  }
+
+  if(!Order.OrderNo.includes("/V-"))
+  {
+   let slash = Order.OrderNo.lastIndexOf("/");
+   let proref = Order.OrderNo.substring(slash+ 1, Order.OrderNo.length);
+   Version = "V-0"
+   WinRefNo = proref
+  }
+
+
+
+
+  var ClientDiscount = Order.Discount
+  var BeforeDiscount = Order.GrandTotal;
+ 
+  var TotalLocations = Order.Solutions.length;
+  var TotalSquareFeet = Order.TotalSquareFeet;
+  var LastEditDate = Order.EditDate;
+  var Discount = Order.Discount
+  var Location = Order.Location
+  var WinDate = Order.WinDate
+  var EditDate = Order.EditDate
+  var SolutionNumber = Order.Solutions.length.toString()
+  var Source = Order.Source.toUpperCase();
+  var HandoverDate = Order.HandOverDate;
+  var CommercialWinDate = Order.CommercialWinDate;
+  var Associate = Order.Associate.toUpperCase();
+  var Status = Order.Status.toUpperCase();
+  var CreationDate = Order.CreationDate
+  var Architect = Order.Architect;
+  var DealerDiscount = 0
+  var Pro
+  
+  var Office =""
+
+  if(Order.Associate=="AAYUSH PANDEY")
+  {
+    Order.Associate == "SHASHANK SINGH"
+  }
+ 
+   
+  if(Order.Associate=="SHASHANK SINGH")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="AMIT PANDEY")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="AAYUSH PANDEY")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="VIKAS SINGHAL")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="ANKIT AGGARWAL")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="RIYAZ SAYYED")
+  {
+    Office = "OM INTERIORS"
+  }
+
+
+  if(Order.Associate=="SAKINA BATISH")
+  {
+    Office = "OM INTERIORS"
+  }
+
+  if(Order.Associate=="NAYAN PATIL"||Order.Associate=="UTKALIKA")
+  {
+    Office = "AAREN INTPRO"
+  }
+
+  if(Order.Associate=="VIPIN KUMAR")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="VISHAL PARIKH")
+  {
+    Office = "SURFACES PLUS"
+  }
+
+  if(Order.Associate=="RAJENDRA BADAYA")
+  {
+    Office = "BADAYA KITCHENS"
+  }
+  
+
+  if(Order.Associate=="RAHUL JAISWAL")
+  {
+    Office = "PRABHUSURAT"
+  }
+
+  
+  if(Order.Associate=="AAYUSH PANDEY")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="ANUJ JAIN")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="RUCHIR")
+  {
+    Office = "WALTZ HYDERABAD"
+  }
+
+  if(Order.Associate=="PRAVEEN KANODIA")
+  {
+    Office = "SPACIO"
+  }
+  if(Order.Associate=="JB ACCOUNTS")
+  {
+    Office = "JB ACCOUNTS"
+  }
+
+  
+ 
+ 
+
+
+
+ 
+  
+ 
+  var ProjectName = WinRefNo+"/"+Order.ProjectName;
+
+
+  
+
+  const res = await fetch(`http://103.203.224.171/Project/api/Rec/SaveProjectData`, {
+    method: 'POST',
+    headers: {
+    'content-type': 'application/json',
+     },
+    body: JSON.stringify(
+      
+        {
+          projId: "", 
+          refno : WinRefNo, 
+          projval :BeforeDiscount,
+          projname : ProjectName, 
+          windate : CommercialWinDate, 
+          totsys : DealerDiscount,
+          totsqm :ClientDiscount, 
+          lasteditdt :LastEditDate, 
+          remark :"", 
+          Enq_Thr :"ONLINE", 
+          Proj_Dt : WinDate, 
+          Category :"A", 
+          Proj_Importance :"YES",
+          job_type :"EOU", 
+          Est_SDate :CreationDate, 
+          Est_EDate : HandoverDate, 
+          Clad_Area :Order.ProValue,  
+          Client_Req :"", 
+          Site_Add : "", 
+          Landmark :"", 
+          Tel1 :TotalSquareFeet, 
+          FaxNo :"", 
+          Tel2 :TotalLocations,
+          Email  :"TEST@GMAIL.COM",
+          No_Layer :"2",
+          Description :"LAMINATION WITH IGU",
+          Qtuantity :"10",
+          Aprx_Prdct_Val :"980000",
+          Sell_Rate :"2000",
+          city : "XXXXX",
+          projtype :  "Win",
+          buildtype : "SOCIAL",
+          buildperf : "SHASHANK SINGH",
+          facadele : "JB GLASS"
+        
+
+
+          }
+      
+    )
+   
+  })
+ 
+
+
+
+const data = await res.json();
+
+
+console.log(data)
+
+
+
+return data
+
+ 
+}
+
+async function CreateGlassProjectCS(Order,LedgerDetail,Users)
+{
+
+
+
+  let WinRefNo = ""
+  let Version= ""
+
+  if(Order.OrderNo.includes("/V-"))
+  {
+   let hyphen = Order.OrderNo.lastIndexOf("/V-");
+   let tempproref = Order.OrderNo.substring(0, hyphen);
+   Version =  Order.OrderNo.substring( hyphen,Order.OrderNo.length);
+   let slash = tempproref.lastIndexOf("/");
+   let proref = tempproref.substring(slash + 1, hyphen); 
+   WinRefNo = proref
+  }
+
+  if(!Order.OrderNo.includes("/V-"))
+  {
+   let slash = Order.OrderNo.lastIndexOf("/");
+   let proref = Order.OrderNo.substring(slash+ 1, Order.OrderNo.length);
+   Version = "V-0"
+   WinRefNo = proref
+  }
+
+
+
+
+  var ClientDiscount = Order.Discount
+  var BeforeDiscount = Order.GrandTotal;
+ 
+  var TotalLocations = Order.Solutions.length;
+  var TotalSquareFeet = Order.TotalSquareFeet;
+  var LastEditDate = Order.EditDate;
+  var Discount = Order.Discount
+  var Location = Order.Location
+  var WinDate = Order.WinDate
+  var EditDate = Order.EditDate
+  var SolutionNumber = Order.Solutions.length.toString()
+  var Source = Order.Source.toUpperCase();
+  var HandoverDate = Order.HandOverDate;
+  var CommercialWinDate = Order.CommercialWinDate;
+  var Associate = Order.Associate.toUpperCase();
+  var Status = Order.Status.toUpperCase();
+  var CreationDate = Order.CreationDate
+  var Architect = Order.Architect;
+  var DealerDiscount = 0
+  var Pro
+  
+  var Office =""
+
+  if(Order.Associate=="AAYUSH PANDEY")
+  {
+    Order.Associate == "SHASHANK SINGH"
+  }
+ 
+   
+  if(Order.Associate=="SHASHANK SINGH")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="AMIT PANDEY")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="AAYUSH PANDEY")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="VIKAS SINGHAL")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="ANKIT AGGARWAL")
+  {
+    Office = "JB GLASS"
+  }
+  if(Order.Associate=="RIYAZ SAYYED")
+  {
+    Office = "OM INTERIORS"
+  }
+
+
+  if(Order.Associate=="SAKINA BATISH")
+  {
+    Office = "OM INTERIORS"
+  }
+
+  if(Order.Associate=="NAYAN PATIL"||Order.Associate=="UTKALIKA")
+  {
+    Office = "AAREN INTPRO"
+  }
+
+  if(Order.Associate=="VIPIN KUMAR")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="VISHAL PARIKH")
+  {
+    Office = "SURFACES PLUS"
+  }
+
+  if(Order.Associate=="RAJENDRA BADAYA")
+  {
+    Office = "BADAYA KITCHENS"
+  }
+  
+
+  if(Order.Associate=="RAHUL JAISWAL")
+  {
+    Office = "PRABHUSURAT"
+  }
+
+  
+  if(Order.Associate=="AAYUSH PANDEY")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="ANUJ JAIN")
+  {
+    Office = "JB GLASS"
+  }
+
+  if(Order.Associate=="RUCHIR")
+  {
+    Office = "WALTZ HYDERABAD"
+  }
+
+  if(Order.Associate=="PRAVEEN KANODIA")
+  {
+    Office = "SPACIO"
+  }
+  if(Order.Associate=="JB ACCOUNTS")
+  {
+    Office = "JB ACCOUNTS"
+  }
+
+  
+ 
+ 
+
+
+
+ 
+  
+ 
+  var ProjectName = WinRefNo+"/"+Order.ProjectName;
+
+
+  
+
+  const res = await fetch(`http://103.203.224.171/Project/api/Rec/SaveProjectData`, {
+    method: 'POST',
+    headers: {
+    'content-type': 'application/json',
+     },
+    body: JSON.stringify(
+      
+        {
+          projId: "", 
+          refno : WinRefNo, 
+          projval :BeforeDiscount,
+          projname : ProjectName, 
+          windate : CommercialWinDate, 
+          totsys : DealerDiscount,
+          totsqm :ClientDiscount, 
+          lasteditdt :LastEditDate, 
+          remark :"", 
+          Enq_Thr :"ONLINE", 
+          Proj_Dt : WinDate, 
+          Category :"A", 
+          Proj_Importance :"YES",
+          job_type :"EOU", 
+          Est_SDate :CreationDate, 
+          Est_EDate : HandoverDate, 
+          Clad_Area :Order.ProValue,  
+          Client_Req :"", 
+          Site_Add : "", 
+          Landmark :"", 
+          Tel1 :TotalSquareFeet, 
+          FaxNo :"", 
+          Tel2 :TotalLocations,
+          Email  :"TEST@GMAIL.COM",
+          No_Layer :"2",
+          Description :"LAMINATION WITH IGU",
+          Qtuantity :"10",
+          Aprx_Prdct_Val :"980000",
+          Sell_Rate :"2000",
+          city : "XXXXX",
+          projtype :  "Win",
+          buildtype : "SOCIAL",
+          buildperf : "SHASHANK SINGH",
+          facadele : "JB GLASS"
+
+
+          }
+      
+    )
+   
+  })
+ 
+const data = await res.json();
+
+
+console.log(data)
+
+var ProjectsDetails = {
+  data : data,
+  Order : Order
+}
+
+
+
+return ProjectsDetails
+
 
  
 }
@@ -5308,6 +5736,8 @@ async function AddWADirectory(access_token,UserID,ProjectID,response)
   })
 
 const data = await res.json();
+
+console.log(data)
 
 let details = { AccessToken : access_token, ProjectID : ProjectID, ReqResposne : response}
 
